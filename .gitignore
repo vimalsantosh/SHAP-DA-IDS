@@ -17,6 +17,7 @@ original_paper.pdf
 malware.pdf
 extracted_text.txt
 *.zip
+push_to_github.bat
 
 # LaTeX auxiliary compilation files
 *.aux
