@@ -1,0 +1,17 @@
+\section{Limitations and Future Work}
+\label{sec:limitations}
+
+\subsection{Limitations}
+While SHAP-DA-IDS improves detection performance on rare attack classes, several limitations should be noted:
+\begin{enumerate}
+    \item \textbf{Generative Backbone:} Because the original DIFT authors did not release their source code and our experimental environment did not have access to an NVIDIA A100 GPU for multi-epoch diffusion sampling, we used an empirical SMOTE generator to test our difficulty-adaptive quota allocation. While the adaptive quota allocation itself is independent of the underlying generator, evaluating our adaptive formulation with a lightweight conditional diffusion model on tabular data is an important next step.
+    \item \textbf{Stubborn Micro-Minority Classes:} While our approach made noticeable progress on Malicious Control (elevating F1 from 2.14\% to 9.61\%) and Data Probing (reaching 4.60\% from zero), other micro-minority attacks like Malicious Operation, Scan, and Spying still scored 0\% F1. These classes have very few examples (fewer than 0.3\% of the data) and their discrete feature values overlap heavily with normal network traffic, making them difficult to separate with tabular flow features alone.
+    \item \textbf{Flow-Level Features:} Our current evaluation relies on aggregated connection-level records rather than raw packet payloads. This means the system cannot inspect payload contents for multi-packet stealth techniques or encrypted evasion attempts.
+\end{enumerate}
+
+\subsection{Conclusion}
+This paper examined the challenge of extreme class imbalance in IoT intrusion detection, focusing on the recent DIFT framework proposed by Wang et al. (Springer JNSM, 2025). We found that DIFT's reliance on a uniform minority augmentation target leaves difficult attack classes under-represented, while its lack of feature selection and explainability limits its practical usefulness in security operations.
+
+To resolve these issues, we introduced \textbf{SHAP-DA-IDS}, which combines SHAP-guided feature selection, difficulty-adaptive data augmentation, and post-hoc TreeSHAP threat attribution. On the full DS2OS smart home dataset (357,952 records), our framework improved the macro F1-score from 22.71\% to 29.17\%, quadrupled the detection score on Malicious Control attacks, and enabled detection of Data Probing attacks that all baseline models missed, all while maintaining 98.90\% F1 on normal traffic with 167\,ms inference latency across 71,591 test records. Furthermore, our SHAP attribution analysis highlighted sensor payload values and operation command types as the primary indicators of malicious activity.
+
+In future work, we plan to evaluate single-step diffusion models optimized for tabular data on edge devices, explore dynamic difficulty adjustment for streaming traffic with evolving attack patterns, and incorporate sequential graph representations to capture multi-device coordinated attacks across IoT networks.

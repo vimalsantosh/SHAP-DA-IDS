@@ -1,0 +1,49 @@
+model,class,precision,recall,f1,support
+Logistic Regression,Data_probing,0.0,0.0,0.0,68.0
+Logistic Regression,Dos,93.42,31.92,47.58,1156.0
+Logistic Regression,Malicious_control,0.0,0.0,0.0,178.0
+Logistic Regression,Malicious_operation,0.0,0.0,0.0,161.0
+Logistic Regression,Normal,97.75,99.98,98.86,69588.0
+Logistic Regression,Scan,0.0,0.0,0.0,310.0
+Logistic Regression,Spying,0.0,0.0,0.0,106.0
+Logistic Regression,Wrong_setup,100.0,87.5,93.33,24.0
+Random Forest,Data_probing,0.0,0.0,0.0,68.0
+Random Forest,Dos,85.84,41.96,56.36,1156.0
+Random Forest,Malicious_control,0.0,0.0,0.0,178.0
+Random Forest,Malicious_operation,0.0,0.0,0.0,161.0
+Random Forest,Normal,97.94,99.93,98.92,69588.0
+Random Forest,Scan,0.0,0.0,0.0,310.0
+Random Forest,Spying,0.0,0.0,0.0,106.0
+Random Forest,Wrong_setup,100.0,87.5,93.33,24.0
+XGBoost,Data_probing,0.0,0.0,0.0,68.0
+XGBoost,Dos,81.21,41.87,55.25,1156.0
+XGBoost,Malicious_control,50.0,1.69,3.26,178.0
+XGBoost,Malicious_operation,0.0,0.0,0.0,161.0
+XGBoost,Normal,97.94,99.9,98.91,69588.0
+XGBoost,Scan,0.0,0.0,0.0,310.0
+XGBoost,Spying,0.0,0.0,0.0,106.0
+XGBoost,Wrong_setup,44.44,16.67,24.24,24.0
+XGBoost + Class Weights,Data_probing,0.92,38.24,1.8,68.0
+XGBoost + Class Weights,Dos,13.73,59.43,22.31,1156.0
+XGBoost + Class Weights,Malicious_control,1.93,37.64,3.67,178.0
+XGBoost + Class Weights,Malicious_operation,0.46,37.27,0.92,161.0
+XGBoost + Class Weights,Normal,99.36,47.35,64.14,69588.0
+XGBoost + Class Weights,Scan,1.33,41.29,2.58,310.0
+XGBoost + Class Weights,Spying,1.1,46.23,2.15,106.0
+XGBoost + Class Weights,Wrong_setup,14.38,87.5,24.71,24.0
+XGBoost + SMOTE Fixed (DIFT-style),Data_probing,0.0,0.0,0.0,68.0
+XGBoost + SMOTE Fixed (DIFT-style),Dos,83.42,41.35,55.29,1156.0
+XGBoost + SMOTE Fixed (DIFT-style),Malicious_control,22.22,1.12,2.14,178.0
+XGBoost + SMOTE Fixed (DIFT-style),Malicious_operation,0.0,0.0,0.0,161.0
+XGBoost + SMOTE Fixed (DIFT-style),Normal,97.95,99.91,98.92,69588.0
+XGBoost + SMOTE Fixed (DIFT-style),Scan,0.0,0.0,0.0,310.0
+XGBoost + SMOTE Fixed (DIFT-style),Spying,0.0,0.0,0.0,106.0
+XGBoost + SMOTE Fixed (DIFT-style),Wrong_setup,73.08,79.17,76.0,24.0
+SHAP-DA-IDS (Ours),Data_probing,10.53,2.94,4.6,68.0
+SHAP-DA-IDS (Ours),Dos,81.22,42.65,55.93,1156.0
+SHAP-DA-IDS (Ours),Malicious_control,21.57,6.18,9.61,178.0
+SHAP-DA-IDS (Ours),Malicious_operation,0.0,0.0,0.0,161.0
+SHAP-DA-IDS (Ours),Normal,98.0,99.82,98.9,69588.0
+SHAP-DA-IDS (Ours),Scan,0.0,0.0,0.0,310.0
+SHAP-DA-IDS (Ours),Spying,0.0,0.0,0.0,106.0
+SHAP-DA-IDS (Ours),Wrong_setup,56.25,75.0,64.29,24.0

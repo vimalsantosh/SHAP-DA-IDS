@@ -1,0 +1,19 @@
+\section{Background and Related Work}
+\label{sec:related_work}
+
+\subsection{Class Imbalance in Network Intrusion Detection}
+Class imbalance is one of the oldest challenges in machine learning for cybersecurity~\cite{he2009learning}. In network traces, attack packets are naturally rare compared to benign user and device sessions. Researchers have generally tackled this problem at either the algorithm level or the data level.
+
+Algorithm-level approaches modify how the model calculates loss. For example, Thakkar and Lohiya~\cite{thakkar2023attack} used a bagging ensemble of Deep Neural Networks (DNNs) with adjusted class weights to force the model to focus on minority attack errors. Dina et al.~\cite{dina2023deep} applied focal loss, which down-weights easy examples and scales up gradients on hard negative samples. While these methods avoid creating synthetic data, our experiments show that class-weighting in practice causes an unacceptably high false-positive rate on normal traffic.
+
+Data-level approaches rebalance the training set before model fitting. SMOTE~\cite{chawla2002smote} linearly interpolates new feature vectors between existing minority samples and their nearest neighbors. While SMOTE is widely used, applying it uniformly across all minority classes without considering how separable each class is often creates redundant data points in already separable regions while failing to provide enough support in complex boundary regions.
+
+\subsection{Generative Augmentation: From GANs to Diffusion}
+To improve on simple linear interpolation, researchers turned to generative deep learning models. Wang et al.~\cite{wang2023lightweight} developed S2CGAN-IDS, using conditional Generative Adversarial Networks (GANs) to generate minority intrusion flows. While GANs can learn complex distributions, training them is notoriously tricky: the generator and discriminator often destabilize each other, leading to mode collapse where the generator outputs only a few repeated variations of an attack.
+
+Denoising diffusion probabilistic models (DDPMs)~\cite{ho2020denoising} have recently emerged as an alternative. Rather than using an adversarial game, a diffusion model gradually adds Gaussian noise to training data over $T$ timesteps, and then trains a neural network (typically a U-Net) to reverse this process and reconstruct clean samples from noise. In DIFT, Wang et al.~\cite{wang2025dift} adapted this diffusion process to synthesize minority attack traffic for IoT intrusion detection. However, DIFT sets a single, fixed augmentation target for every minority class by averaging their raw counts. As we show in this paper, this heuristic leaves the rarest and most difficult attack types severely under-represented.
+
+\subsection{Model Explainability in IoT Security}
+Modern intrusion detection models are frequently criticized for being black boxes~\cite{fauvel2021xcm}. When a neural network flags a connection as malicious, security teams need to know why before isolating a device or cutting off a service. 
+
+Lundberg and Lee~\cite{lundberg2017unified} proposed SHAP (SHapley Additive exPlanations), which uses cooperative game theory to compute the exact contribution of each feature to a model's prediction. TreeSHAP makes this computation tractable in polynomial time for tree ensembles. While previous studies have used SHAP primarily to inspect models after training, in this work we use SHAP in two distinct ways: first, as a feature selection filter before augmentation, and second, as an explanation layer to inspect final test predictions.

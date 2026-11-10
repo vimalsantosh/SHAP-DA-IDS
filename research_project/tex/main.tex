@@ -1,0 +1,47 @@
+\documentclass[journal]{IEEEtran}
+
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{cite}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+% Configure graphics path to resolve whether compiled from root or tex/ directory
+\graphicspath{{images/}{../images/}}
+
+\begin{document}
+
+\title{Difficulty-Adaptive Augmentation with Explainable Feature Selection for Imbalanced IoT Intrusion Detection}
+
+\author{B~Vimal~Santosh}
+
+\maketitle
+
+\begin{abstract}
+Internet of Things (IoT) networks are vulnerable to cyber attacks, but detecting these intrusions with machine learning is difficult because network traffic is severely imbalanced. In typical datasets, normal traffic makes up more than 97\% of all records, while dangerous attacks like remote device control or data probing occur only a few dozen times. When standard models are trained on such data, they achieve high overall accuracy simply by guessing normal traffic, while missing rare attacks almost entirely. The recently proposed DIFT (Diffusion-Transformer for Intrusion Detection) model attempted to address this by generating minority attack samples with a diffusion model. However, DIFT uses a fixed augmentation target based on the average minority count, treating all attack classes equally regardless of how difficult they are to distinguish, includes no feature selection, and provides no explanation for its alerts.
+
+In this paper, we propose SHAP-DA-IDS to overcome these issues. Our framework introduces three main components: (1) SHAP-guided feature selection to remove noisy attributes like missing node descriptors; (2) difficulty-adaptive augmentation, which assigns synthetic generation quotas based on each attack class's cross-validated detection error ($1 - \text{F1}$); and (3) TreeSHAP threat attribution to explain individual predictions. We evaluate our method on the full DS2OS smart home dataset (357,952 records across eight classes with an imbalance ratio up to 2,851:1). SHAP-DA-IDS improves the macro F1-score from 22.71\% (unbalanced baseline) to 29.17\%, increases the F1-score on Malicious Control attacks from 2.14\% under DIFT's fixed augmentation to 9.61\% (a 4.49$\times$ improvement), and successfully detects Data Probing attacks that baseline models missed completely, all while preserving 98.90\% F1 on normal traffic. Finally, our explainability analysis reveals that payload values and operation types serve as the primary indicators of compromise, offering clear, actionable insights for security analysts.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Internet of Things (IoT), Intrusion Detection Systems (IDS), Class Imbalance, Explainable AI (XAI), SHAP, Difficulty-Adaptive Augmentation, Network Security.
+\end{IEEEkeywords}
+
+\input{introduction}
+\input{related_work}
+\input{methodology}
+\input{experiments}
+\input{results}
+\input{conclusion}
+
+\bibliographystyle{IEEEtran}
+\bibliography{references,../references/references,references/references}
+
+\end{document}

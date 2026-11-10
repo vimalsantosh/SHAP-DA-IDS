@@ -1,0 +1,43 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Large raw datasets (must be downloaded or generated locally)
+data/raw/
+*.csv
+!results/*.csv
+
+# Serialized model caches & arrays
+*.npy
+*.pkl
+
+# Intermediate / external files
+original_paper.pdf
+malware.pdf
+extracted_text.txt
+*.zip
+
+# LaTeX auxiliary compilation files
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.toc
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
+# OS specific files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Environment / IDE
+.env
+.venv
+env/
+venv/
+.idea/
+.vscode/

@@ -1,0 +1,41 @@
+\section{Introduction}
+\label{sec:introduction}
+
+Internet of Things (IoT) devices have become widespread in smart homes, industrial monitoring, and healthcare systems. Devices like smart thermostats, environmental sensors, automated door locks, and surveillance cameras exchange continuous telemetry over local networks. However, because these devices have limited processing power and often run minimal operating systems with simple protocol implementations, they present an attractive target for network intrusions~\cite{khraisat2021critical}. Typical threats include denial-of-service (DoS) floods, port scanning, data exfiltration, and unauthorized control directives.
+
+To protect IoT networks, Intrusion Detection Systems (IDS) inspect network flows to spot malicious activity in real time~\cite{almiani2020deep}. Machine learning models have become the standard tool for this task because rule-based inspection cannot easily adapt to changing attack signatures. However, a major issue in building ML-based intrusion detectors is the extreme class imbalance found in real network traffic~\cite{he2009learning}. In typical smart home traces, normal device communications make up more than 97\% of all recorded packets. Severe attack types, such as remote device manipulation or subtle data probing, represent less than 1\% of the data. When standard classifiers are trained on such skewed data, they minimize overall error by simply guessing that every packet is normal. This produces an artificially high overall accuracy (often over 97\%), but the detector misses almost all rare attacks~\cite{thakkar2023attack}.
+
+Researchers usually handle this problem through either cost-sensitive learning or sample generation. Cost-sensitive methods~\cite{dina2023deep} assign higher misclassification penalties to minority samples, but in practice, this tends to drastically increase false alarms on benign traffic. Sample generation methods, such as SMOTE~\cite{chawla2002smote} or Generative Adversarial Networks (GANs)~\cite{wang2023lightweight}, try to synthesize additional minority samples. However, GANs often suffer from mode collapse, generating only a narrow subset of attack variations.
+
+Recently, Wang et al.~\cite{wang2025dift} introduced \textbf{DIFT} (``A Diffusion-Transformer for Intrusion Detection of IoT with Imbalanced Learning''), published in the \textit{Journal of Network and Systems Management} (Springer, 2025). DIFT uses a diffusion model to generate synthetic minority samples, applies a sliding-window patching technique to shorten traffic sequences, and feeds the balanced data into a Time Series Transformer.
+
+While DIFT reports strong numbers on the DS2OS and TON\_IoT datasets, a careful look at its methodology reveals three key limitations:
+\begin{enumerate}
+    \item \textbf{Fixed Augmentation Target:} DIFT calculates its oversampling quota by taking the arithmetic mean of all minority class counts. This heuristic treats every attack class the same. For example, if DoS has 4,600 training samples and Data Probing has only 274, clamping both to the minority average ($\approx 1,144$ samples) means Data Probing is barely augmented, while DoS is not expanded at all. In real IoT setups, some attacks are much harder to separate from normal traffic than others, so a uniform target is insufficient.
+    \item \textbf{No Feature Selection:} DIFT uses all raw features directly. Network captures often include fields with many missing values (such as node type descriptors) or columns that add noise without helping classification.
+    \item \textbf{Zero Explainability:} DIFT outputs only class probabilities from a softmax layer. In a real Security Operations Center (SOC), human analysts cannot tell which specific packet fields triggered an alarm, making it difficult to trust the system or triage false alerts.
+\end{enumerate}
+
+This paper addresses these three limitations with three practical enhancements:
+\begin{itemize}
+    \item \textbf{SHAP-Guided Feature Selection:} We train a preliminary classifier to compute Shapley feature attributions, keeping only the features that account for 95\% of total attribution mass and discarding noisy or incomplete fields.
+    \item \textbf{Difficulty-Adaptive Augmentation:} Rather than using an arbitrary average count, we evaluate each class's initial detection error ($1 - \text{F1}$) through cross-validation and assign synthetic oversampling quotas proportional to how hard the class is to detect.
+    \item \textbf{Explainable Threat Attribution:} We use TreeSHAP on a gradient-boosted decision tree ensemble to provide exact feature attributions for every prediction, showing analysts exactly which fields (such as unusual payload values or unauthorized command types) caused an alert.
+\end{itemize}
+
+We test our method on the full DS2OS dataset (357,952 connection records), using the same dataset and experimental setup as the original paper to ensure a direct comparison. Table~\ref{tab:contribution_comparison} summarizes the key differences between original DIFT and our approach.
+
+\begin{table*}[!t]
+\centering
+\caption{Comparison of System Design: Original DIFT vs. Proposed SHAP-DA-IDS}
+\label{tab:contribution_comparison}
+\begin{tabular}{p{3.2cm}p{6.8cm}p{6.8cm}}
+\toprule
+\textbf{Component} & \textbf{Original DIFT (Wang et al., 2025)~\cite{wang2025dift}} & \textbf{Proposed SHAP-DA-IDS (This Work)} \\ \midrule
+\textbf{Feature Space} & Uses all raw features; keeps attributes with missing values. & SHAP-guided feature selection (SFS); retains top-$k$ features capturing $\ge 95\%$ of attribution mass. \\
+\textbf{Imbalance Handling} & Fixed quota: sets minority target strictly to the average minority count. & Difficulty-Adaptive Augmentation (DAA): targets scaled dynamically proportional to empirical class error ($1 - \text{F1}$). \\
+\textbf{Classifier Architecture} & Patched Time Series Transformer with multi-head self-attention. & Gradient-boosted decision trees (XGBoost) enabling exact polynomial-time TreeSHAP computation. \\
+\textbf{Explainability} & None (black-box categorical predictions). & Full post-hoc TreeSHAP layer: global rankings, local sample vectors, and per-class decision drivers. \\
+\textbf{Hardware Requirements} & Requires enterprise GPU (NVIDIA A100 80GB) for 200 diffusion + 100 Transformer epochs. & CPU-feasible, fast inference ($< 170$\,ms for 71k samples), suitable for edge IoT deployments. \\ \bottomrule
+\end{tabular}
+\end{table*}

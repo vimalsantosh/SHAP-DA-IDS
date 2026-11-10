@@ -1,0 +1,9 @@
+,Data_probing,Dos,Malicious_control,Malicious_operation,Normal,Scan,Spying,Wrong_setup
+Data_probing,2,0,0,0,66,0,0,0
+Dos,1,493,15,0,633,0,0,14
+Malicious_control,0,23,11,0,144,0,0,0
+Malicious_operation,0,6,0,0,155,0,0,0
+Normal,16,82,25,0,69464,0,1,0
+Scan,0,0,0,0,310,0,0,0
+Spying,0,0,0,0,106,0,0,0
+Wrong_setup,0,3,0,0,3,0,0,18

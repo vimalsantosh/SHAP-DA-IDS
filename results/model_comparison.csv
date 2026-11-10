@@ -1,0 +1,7 @@
+model,accuracy,macro_precision,macro_recall,macro_f1,weighted_f1,roc_auc,train_time_s,inf_time_ms
+Logistic Regression,97.73,36.4,27.43,29.97,96.89,0.8415,1.33,4.0
+Random Forest,97.84,35.47,28.67,31.08,97.1,0.8675,8.63,236.58
+XGBoost,97.79,34.2,20.02,22.71,97.06,0.8905,8.96,162.53
+XGBoost + Class Weights,47.48,16.65,49.37,15.28,62.74,0.8509,9.16,161.0
+XGBoost + SMOTE Fixed (DIFT-style),97.81,34.58,27.69,29.04,97.07,0.8891,9.15,158.64
+SHAP-DA-IDS (Ours),97.76,33.45,28.32,29.17,97.09,0.877,11.54,167.0
